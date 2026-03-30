@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WebP SEO Optimizer — E-commerce Image Tool</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --surface2: #1a1a26;
+    --border: #2a2a3d;
+    --accent: #5b6bff;
+    --accent2: #00e5b4;
+    --accent3: #ff6b6b;
+    --text: #e8e8f0;
+    --muted: #7070a0;
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(91,107,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(91,107,255,0.04) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .glow-orb {
+    position: fixed;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(91,107,255,0.12) 0%, transparent 70%);
+    top: -200px; right: -200px;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .glow-orb2 {
+    position: fixed;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,229,180,0.08) 0%, transparent 70%);
+    bottom: -100px; left: -100px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .app-wrap {
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  /* Header */
+  header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+  .logo-badge {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+    box-shadow: 0 0 24px rgba(91,107,255,0.4);
+  }
+  .logo-text h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    line-height: 1;
+  }
+  .logo-text span {
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 400;
+  }
+  .badge-webp {
+    margin-left: auto;
+    background: rgba(0,229,180,0.1);
+    border: 1px solid rgba(0,229,180,0.3);
+    color: var(--accent2);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 5px 12px;
+    border-radius: 100px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* Sections */
+  .section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    margin-bottom: 20px;
+    animation: fadeUp 0.4s ease both;
+  }
+  .section:nth-child(2) { animation-delay: 0.05s; }
+  .section:nth-child(3) { animation-delay: 0.1s; }
+  .section:nth-child(4) { animation-delay: 0.15s; }
+  .section:nth-child(5) { animation-delay: 0.2s; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .section-icon {
+    font-size: 18px;
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    color: var(--text);
+  }
+
+  /* Form Grid */
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .form-grid .full { grid-column: 1 / -1; }
+
+  .field label {
+    display: block;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+    font-family: 'DM Mono', monospace;
+  }
+  .field input, .field select {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 11px 14px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .field input::placeholder { color: #404060; }
+  .field input:focus, .field select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(91,107,255,0.15);
+  }
+  .field select option { background: var(--surface2); }
+
+  /* Slug Preview */
+  .slug-preview {
+    margin-top: 16px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 48px;
+  }
+  .slug-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--accent2);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .slug-value {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: #b0b8ff;
+    word-break: break-all;
+    line-height: 1.4;
+  }
+  .slug-empty { color: #404060; font-style: italic; font-family: 'DM Sans'; font-size: 13px; }
+
+  /* Compression */
+  .compression-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .slider-wrap { flex: 1; }
+  .quality-slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--border);
+    outline: none;
+    cursor: pointer;
+    position: relative;
+  }
+  .quality-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(91,107,255,0.5);
+    border: 2px solid var(--bg);
+    transition: transform 0.2s;
+  }
+  .quality-slider::-webkit-slider-thumb:hover { transform: scale(1.2); }
+  .quality-display {
+    font-family: 'Syne', sans-serif;
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--accent2);
+    min-width: 70px;
+    text-align: right;
+    line-height: 1;
+  }
+  .quality-display span { font-size: 16px; color: var(--muted); font-weight: 400; }
+  .quality-hint {
+    margin-top: 10px;
+    font-size: 12px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .quality-hint .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--accent2); flex-shrink: 0;
+  }
+  .quality-hint.warn .dot { background: #ffaa00; }
+  .quality-hint.bad  .dot { background: var(--accent3); }
+
+  /* Drop zone */
+  .dropzone {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 48px 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.25s;
+    position: relative;
+    background: var(--surface2);
+    overflow: hidden;
+  }
+  .dropzone::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(91,107,255,0.05), rgba(0,229,180,0.05));
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+  .dropzone:hover, .dropzone.drag-over {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px rgba(91,107,255,0.1);
+  }
+  .dropzone:hover::before, .dropzone.drag-over::before { opacity: 1; }
+  .dropzone.drag-over { border-color: var(--accent2); }
+  .dropzone input[type="file"] {
+    position: absolute; inset: 0; opacity: 0; cursor: pointer; z-index: 2;
+  }
+  .drop-icon { font-size: 48px; margin-bottom: 16px; display: block; }
+  .drop-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .drop-sub { font-size: 13px; color: var(--muted); }
+  .drop-formats {
+    margin-top: 12px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .fmt-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    padding: 3px 9px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    letter-spacing: 0.5px;
+  }
+
+  /* Image Grid */
+  .images-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+    margin-top: 20px;
+  }
+  .img-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    position: relative;
+    animation: popIn 0.3s cubic-bezier(0.34,1.56,0.64,1) both;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .img-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  }
+  @keyframes popIn {
+    from { opacity: 0; transform: scale(0.85); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+  .img-card-thumb {
+    width: 100%; aspect-ratio: 1;
+    object-fit: cover;
+    display: block;
+    background: var(--bg);
+  }
+  .img-card-info {
+    padding: 10px 12px;
+    border-top: 1px solid var(--border);
+  }
+  .img-card-name {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: #b0b8ff;
+    word-break: break-all;
+    line-height: 1.5;
+    margin-bottom: 6px;
+  }
+  .img-card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .img-card-status {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+  }
+  .status-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent2);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+  .size-saved {
+    font-size: 10px;
+    background: rgba(0,229,180,0.1);
+    color: var(--accent2);
+    border: 1px solid rgba(0,229,180,0.2);
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-family: 'DM Mono', monospace;
+  }
+  .remove-btn {
+    position: absolute;
+    top: 6px; right: 6px;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: rgba(10,10,15,0.8);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 13px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s, color 0.2s;
+    z-index: 3;
+  }
+  .img-card:hover .remove-btn { opacity: 1; }
+  .remove-btn:hover { color: var(--accent3); border-color: var(--accent3); }
+
+  /* Download btn */
+  .dl-btn {
+    position: absolute;
+    bottom: 8px; right: 8px;
+    padding: 5px 10px;
+    border-radius: 6px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    font-family: 'DM Mono', monospace;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .img-card:hover .dl-btn { opacity: 1; }
+
+  /* Action bar */
+  .action-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 20px;
+  }
+  .btn-primary {
+    padding: 13px 28px;
+    border-radius: var(--radius-sm);
+    background: linear-gradient(135deg, var(--accent), #7b6bff);
+    color: #fff;
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+    letter-spacing: 0.3px;
+    box-shadow: 0 4px 20px rgba(91,107,255,0.35);
+    flex-shrink: 0;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(91,107,255,0.5);
+  }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+  .btn-secondary {
+    padding: 13px 20px;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--text); }
+  .count-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--muted);
+    margin-left: auto;
+  }
+  .count-badge strong { color: var(--accent2); }
+
+  /* SEO Tips */
+  .tips-section {
+    background: linear-gradient(135deg, rgba(91,107,255,0.06), rgba(0,229,180,0.04));
+    border: 1px solid rgba(91,107,255,0.2);
+  }
+  .tips-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .tip-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 14px;
+    background: rgba(255,255,255,0.02);
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(255,255,255,0.04);
+    transition: border-color 0.2s;
+  }
+  .tip-item:hover { border-color: rgba(91,107,255,0.25); }
+  .tip-emoji { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+  .tip-text { font-size: 13px; color: var(--muted); line-height: 1.6; }
+  .tip-text strong { color: var(--text); }
+
+  /* Empty state */
+  .empty-state {
+    text-align: center;
+    padding: 32px;
+    color: var(--muted);
+    font-size: 13px;
+    display: none;
+  }
+  .empty-state.visible { display: block; }
+
+  /* Progress */
+  .progress-bar-wrap {
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 10px;
+    display: none;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 2px;
+    transition: width 0.3s;
+    width: 0%;
+  }
+
+  /* No product name warning */
+  .no-name-msg {
+    font-size: 12px; color: #ffaa50;
+    margin-top: 6px;
+    display: none;
+    font-family: 'DM Mono', monospace;
+  }
+
+  @media (max-width: 600px) {
+    .form-grid { grid-template-columns: 1fr; }
+    .tips-grid  { grid-template-columns: 1fr; }
+    .compression-row { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+<div class="glow-orb"></div>
+<div class="glow-orb2"></div>
+
+<div class="app-wrap">
+
+  <!-- Header -->
+  <header>
+    <div class="logo-badge">🖼️</div>
+    <div class="logo-text">
+      <h1>WebP SEO Optimizer</h1>
+      <span>Convierte y renombra imágenes para e-commerce</span>
+    </div>
+    <div class="badge-webp">E-COMMERCE</div>
+  </header>
+
+  <!-- Product Info -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-icon">📦</span>
+      <span class="section-title">Información del Producto</span>
+    </div>
+    <div class="form-grid">
+      <div class="field full">
+        <label>Nombre del Producto <span style="color:#ff6b6b">*</span></label>
+        <input type="text" id="productName" placeholder="ej: Lentes Ray-Ban Wayfarer Negro Mate" autocomplete="off">
+        <div class="no-name-msg" id="noNameMsg">⚠ Ingresa el nombre del producto para generar el nombre SEO</div>
+      </div>
+      <div class="field">
+        <label>SKU / Código (opcional)</label>
+        <input type="text" id="sku" placeholder="ej: RB-2140-901-50">
+      </div>
+      <div class="field">
+        <label>Categoría (opcional)</label>
+        <input type="text" id="category" placeholder="ej: lentes-sol, montura, oftalmicos">
+      </div>
+      <div class="field full">
+        <label>Especificaciones / Keywords (separadas por coma)</label>
+        <input type="text" id="keywords" placeholder="ej: negro-mate, uv400, acetato, hombre, polarizado">
+      </div>
+    </div>
+
+    <!-- Slug Preview -->
+    <div class="slug-preview">
+      <span class="slug-label">SEO →</span>
+      <span class="slug-value" id="slugPreview"><span class="slug-empty">El nombre del archivo aparecerá aquí...</span></span>
+    </div>
+  </div>
+
+  <!-- Compression Config -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-icon">⚙️</span>
+      <span class="section-title">Configuración de Compresión</span>
+    </div>
+    <div class="compression-row">
+      <div class="slider-wrap">
+        <input type="range" class="quality-slider" id="qualitySlider" min="10" max="100" value="80">
+      </div>
+      <div class="quality-display" id="qualityDisplay">80<span>%</span></div>
+    </div>
+    <div class="quality-hint" id="qualityHint">
+      <span class="dot"></span>
+      <span id="qualityHintText">Recomendado para e-commerce — buen balance calidad/tamaño</span>
+    </div>
+  </div>
+
+  <!-- Drop Zone -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-icon">🗂️</span>
+      <span class="section-title">Imágenes del Producto</span>
+    </div>
+
+    <div class="dropzone" id="dropzone">
+      <input type="file" id="fileInput" multiple accept="image/*">
+      <span class="drop-icon">📥</span>
+      <div class="drop-title">Arrastra tus imágenes aquí</div>
+      <div class="drop-sub">o haz clic para seleccionarlas</div>
+      <div class="drop-formats">
+        <span class="fmt-badge">JPG</span>
+        <span class="fmt-badge">PNG</span>
+        <span class="fmt-badge">WEBP</span>
+        <span class="fmt-badge">GIF</span>
+        <span class="fmt-badge">BMP</span>
+        <span class="fmt-badge">AVIF</span>
+      </div>
+    </div>
+
+    <div class="progress-bar-wrap" id="progressWrap">
+      <div class="progress-bar-fill" id="progressBar"></div>
+    </div>
+
+    <div id="imagesGrid" class="images-grid"></div>
+
+    <div class="action-bar" id="actionBar" style="display:none">
+      <button class="btn-primary" id="convertBtn">⚡ Convertir a WebP</button>
+      <button class="btn-secondary" id="clearBtn">Limpiar todo</button>
+      <div class="count-badge"><strong id="imgCount">0</strong> imágenes cargadas</div>
+    </div>
+  </div>
+
+  <!-- SEO Tips -->
+  <div class="section tips-section">
+    <div class="section-header">
+      <span class="section-icon">💡</span>
+      <span class="section-title">Tips SEO para imágenes de productos</span>
+    </div>
+    <div class="tips-grid">
+      <div class="tip-item">
+        <span class="tip-emoji">🏷️</span>
+        <div class="tip-text"><strong>Nombres descriptivos:</strong> "lentes-rayban-wayfarer-negro-uv400.webp" es infinitamente mejor que "IMG_001.webp" para Google.</div>
+      </div>
+      <div class="tip-item">
+        <span class="tip-emoji">🔑</span>
+        <div class="tip-text"><strong>Incluye keywords:</strong> marca, modelo, color, material, protección UV. Todo suma para posicionar tu óptica online.</div>
+      </div>
+      <div class="tip-item">
+        <span class="tip-emoji">⚡</span>
+        <div class="tip-text"><strong>WebP reduce hasta 90%</strong> el tamaño vs JPG sin perder calidad visible. Ideal para catálogos con muchos modelos de lentes.</div>
+      </div>
+      <div class="tip-item">
+        <span class="tip-emoji">🚀</span>
+        <div class="tip-text"><strong>Imágenes ligeras = velocidad = ranking:</strong> Google penaliza sitios lentos. Crítico si tienes cientos de monturas en catálogo.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── Slug generator ──────────────────────────────────────────────────────────
+function toSlug(str) {
+  return str.toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9\s-]/g, '')
+    .trim().replace(/\s+/g, '-')
+    .replace(/-+/g, '-');
+}
+
+function buildFilename(index) {
+  const name = document.getElementById('productName').value.trim();
+  const sku  = document.getElementById('sku').value.trim();
+  const kw   = document.getElementById('keywords').value.trim();
+  const cat  = document.getElementById('category').value;
+
+  if (!name) return null;
+
+  const parts = [];
+  if (cat) parts.push(toSlug(cat));
+  parts.push(toSlug(name));
+  if (kw) kw.split(',').forEach(k => { const s = toSlug(k.trim()); if (s) parts.push(s); });
+  if (sku) parts.push(toSlug(sku));
+
+  const base = parts.join('-');
+  const suffix = index > 0 ? `-${String(index + 1).padStart(2, '0')}` : '';
+  return `${base}${suffix}.webp`;
+}
+
+function updateSlugPreview() {
+  const name = document.getElementById('productName').value.trim();
+  const el = document.getElementById('slugPreview');
+  const fn = buildFilename(0);
+  if (fn) {
+    el.innerHTML = fn;
+  } else {
+    el.innerHTML = '<span class="slug-empty">El nombre del archivo aparecerá aquí...</span>';
+  }
+}
+
+['productName','sku','keywords','category'].forEach(id => {
+  document.getElementById(id).addEventListener('input', () => {
+    updateSlugPreview();
+    refreshCardNames();
+  });
+});
+
+// ── Quality slider ──────────────────────────────────────────────────────────
+const slider = document.getElementById('qualitySlider');
+const display = document.getElementById('qualityDisplay');
+const hintEl = document.getElementById('qualityHint');
+const hintText = document.getElementById('qualityHintText');
+
+slider.addEventListener('input', () => {
+  const v = +slider.value;
+  display.innerHTML = `${v}<span>%</span>`;
+  hintEl.className = 'quality-hint';
+  if (v >= 75 && v <= 85) {
+    hintText.textContent = 'Recomendado para e-commerce — buen balance calidad/tamaño';
+  } else if (v > 85 && v <= 95) {
+    hintEl.classList.add('warn');
+    hintText.textContent = 'Alta calidad — el archivo será más pesado';
+  } else if (v > 95) {
+    hintEl.classList.add('bad');
+    hintText.textContent = 'Máxima calidad — tamaño muy grande, no recomendado para web';
+  } else if (v >= 60 && v < 75) {
+    hintEl.classList.add('warn');
+    hintText.textContent = 'Calidad aceptable — podría notarse algo de compresión';
+  } else {
+    hintEl.classList.add('bad');
+    hintText.textContent = 'Calidad baja — posible degradación visible en la imagen';
+  }
+  if (processedImages.length) reRenderProcessed();
+});
+
+// ── File handling ────────────────────────────────────────────────────────────
+const dropzone = document.getElementById('dropzone');
+const fileInput = document.getElementById('fileInput');
+let loadedFiles = [];       // {file, objectUrl}
+let processedImages = [];   // {name, blobUrl, origSize, newSize}
+
+dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('drag-over'); });
+dropzone.addEventListener('dragleave', () => dropzone.classList.remove('drag-over'));
+dropzone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropzone.classList.remove('drag-over');
+  handleFiles([...e.dataTransfer.files]);
+});
+fileInput.addEventListener('change', () => handleFiles([...fileInput.files]));
+
+function handleFiles(files) {
+  const imgs = files.filter(f => f.type.startsWith('image/'));
+  if (!imgs.length) return;
+  imgs.forEach(f => {
+    const url = URL.createObjectURL(f);
+    loadedFiles.push({ file: f, objectUrl: url });
+  });
+  processedImages = [];
+  renderLoaded();
+}
+
+function renderLoaded() {
+  const grid = document.getElementById('imagesGrid');
+  const bar = document.getElementById('actionBar');
+  grid.innerHTML = '';
+
+  loadedFiles.forEach((item, i) => {
+    const fn = buildFilename(i) || item.file.name;
+    const card = document.createElement('div');
+    card.className = 'img-card';
+    card.innerHTML = `
+      <img src="${item.objectUrl}" class="img-card-thumb" alt="">
+      <button class="remove-btn" data-i="${i}" title="Eliminar">✕</button>
+      <div class="img-card-info">
+        <div class="img-card-name">${fn}</div>
+        <div class="img-card-meta">
+          <div class="img-card-status"><span class="status-dot" style="background:#ffaa00;animation:none"></span>Original</div>
+          <span>${(item.file.size / 1024).toFixed(0)} KB</span>
+        </div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+
+  grid.querySelectorAll('.remove-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const i = +btn.dataset.i;
+      URL.revokeObjectURL(loadedFiles[i].objectUrl);
+      loadedFiles.splice(i, 1);
+      processedImages = [];
+      renderLoaded();
+    });
+  });
+
+  if (loadedFiles.length) {
+    bar.style.display = 'flex';
+    document.getElementById('imgCount').textContent = loadedFiles.length;
+  } else {
+    bar.style.display = 'none';
+  }
+}
+
+function refreshCardNames() {
+  if (processedImages.length) { reRenderProcessed(); return; }
+  const cards = document.querySelectorAll('.img-card-name');
+  cards.forEach((el, i) => { el.textContent = buildFilename(i) || loadedFiles[i]?.file.name || ''; });
+}
+
+// ── Conversion ───────────────────────────────────────────────────────────────
+document.getElementById('convertBtn').addEventListener('click', convertAll);
+
+async function convertAll() {
+  const name = document.getElementById('productName').value.trim();
+  if (!name) {
+    document.getElementById('noNameMsg').style.display = 'block';
+    document.getElementById('productName').focus();
+    return;
+  }
+  document.getElementById('noNameMsg').style.display = 'none';
+
+  if (!loadedFiles.length) return;
+  const quality = +slider.value / 100;
+
+  const btn = document.getElementById('convertBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ Convirtiendo...';
+
+  const pw = document.getElementById('progressWrap');
+  const pb = document.getElementById('progressBar');
+  pw.style.display = 'block';
+  pb.style.width = '0%';
+
+  processedImages = [];
+
+  for (let i = 0; i < loadedFiles.length; i++) {
+    const { file, objectUrl } = loadedFiles[i];
+    const filename = buildFilename(i);
+    const result = await fileToWebP(objectUrl, quality);
+    processedImages.push({
+      name: filename,
+      blobUrl: result.url,
+      origSize: file.size,
+      newSize: result.size
+    });
+    pb.style.width = `${((i + 1) / loadedFiles.length) * 100}%`;
+    await new Promise(r => setTimeout(r, 40));
+  }
+
+  btn.disabled = false;
+  btn.textContent = '⚡ Convertir a WebP';
+  pw.style.display = 'none';
+  reRenderProcessed();
+}
+
+function fileToWebP(src, quality) {
+  return new Promise(resolve => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = img.naturalWidth;
+      canvas.height = img.naturalHeight;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0);
+      canvas.toBlob(blob => {
+        resolve({ url: URL.createObjectURL(blob), size: blob.size });
+      }, 'image/webp', quality);
+    };
+    img.src = src;
+  });
+}
+
+function reRenderProcessed() {
+  const grid = document.getElementById('imagesGrid');
+  grid.innerHTML = '';
+
+  processedImages.forEach((item, i) => {
+    const saved = Math.max(0, ((1 - item.newSize / item.origSize) * 100)).toFixed(0);
+    const card = document.createElement('div');
+    card.className = 'img-card';
+    card.innerHTML = `
+      <img src="${item.blobUrl}" class="img-card-thumb" alt="">
+      <a href="${item.blobUrl}" download="${item.name}" class="dl-btn" title="Descargar">⬇ DL</a>
+      <div class="img-card-info">
+        <div class="img-card-name">${item.name}</div>
+        <div class="img-card-meta">
+          <div class="img-card-status"><span class="status-dot"></span>WebP</div>
+          <span class="size-saved">−${saved}%</span>
+        </div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+
+  // Download all button
+  const bar = document.getElementById('actionBar');
+  let dlAll = bar.querySelector('.dl-all-btn');
+  if (!dlAll) {
+    dlAll = document.createElement('button');
+    dlAll.className = 'btn-secondary dl-all-btn';
+    dlAll.textContent = '⬇ Descargar todo';
+    bar.insertBefore(dlAll, bar.querySelector('.btn-secondary'));
+  }
+  dlAll.onclick = downloadAll;
+}
+
+function downloadAll() {
+  processedImages.forEach((item, i) => {
+    setTimeout(() => {
+      const a = document.createElement('a');
+      a.href = item.blobUrl;
+      a.download = item.name;
+      a.click();
+    }, i * 250);
+  });
+}
+
+document.getElementById('clearBtn').addEventListener('click', () => {
+  loadedFiles.forEach(f => URL.revokeObjectURL(f.objectUrl));
+  processedImages.forEach(p => URL.revokeObjectURL(p.blobUrl));
+  loadedFiles = [];
+  processedImages = [];
+  fileInput.value = '';
+  document.getElementById('imagesGrid').innerHTML = '';
+  document.getElementById('actionBar').style.display = 'none';
+  const dlAll = document.querySelector('.dl-all-btn');
+  if (dlAll) dlAll.remove();
+});
+</script>
+</body>
+</html>
